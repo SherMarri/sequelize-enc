@@ -1,6 +1,6 @@
 # Sequelize Enc
 
-Allows specifying [Joi](https://github.com/hapijs/joi) validation schema for `JSONB` model attributes in [Sequelize](https://github.com/sequelize/sequelize).
+Support for encrypted attributes for [Sequelize](https://github.com/sequelize/sequelize) models.
 
 ### Installation
 
@@ -22,6 +22,31 @@ sequelizeEncPlugin(sequelize, {
   },
   decrypt: value => {
     return value
+  },
+})
+```
+
+### Example
+
+```js
+const SampleModel = sequelize.define('SampleModel', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  details: {
+    type: Sequelize.BLOB,
+    encrypted: {
+      type: Sequelize.JSONB,
+    },
+  },
+})
+
+await SampleModel.create({
+  name: 'Sample name',
+  details: {
+    password: 'qwerty',
+    secret: 'azerty',
   },
 })
 ```
