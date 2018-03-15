@@ -1,7 +1,7 @@
 'use strict'
 
 const debug = require('debug')('sequelize-enc')
-const bytes = require('./bytes')
+const { encode, decode } = require('./bytes')
 
 module.exports = function (sequelize, { encrypt, decrypt }) {
 
@@ -41,7 +41,7 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
       type.validate(value)
 
       // Encode value into bytes
-      const bytes = bytes.encode(type, value)
+      const bytes = encode(type, value)
 
       // Encrypt bytes
       const encrypted = await encrypt(bytes)
@@ -74,7 +74,7 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
       const bytes = await decrypt(encrypted)
 
       // Decode value from bytes
-      const value = bytes.decode(type, bytes)
+      const value = decode(type, bytes)
 
       instance.set(fieldName, value)
     }))
