@@ -11,6 +11,10 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
 
   async function encryptAttributes(instances) {
 
+    if (!instance) {
+      return
+    }
+
     if (instances.constructor !== Array) {
       instances = [ instances ]
     }
@@ -58,6 +62,10 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
   }
 
   async function decryptAttributes(instances) {
+
+    if (!instance) {
+      return
+    }
 
     if (instances.constructor !== Array) {
       instances = [ instances ]
