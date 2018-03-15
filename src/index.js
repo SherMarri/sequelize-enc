@@ -9,74 +9,88 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
     throw new Error('The required sequelize instance option is missing')
   }
 
-  async function encryptAttributes(instance) {
+  async function encryptAttributes(instances) {
 
-    const changedKeys = []
-
-    Object.keys(instance._changed).forEach(fieldName => {
-      if (instance._changed[fieldName]) {
-        changedKeys.push(fieldName)
-      }
-    })
-
-    if (!changedKeys.length) {
-      return
+    if (instances.constructor !== Array) {
+      instances = [ instances ]
     }
 
-    debug(`Changed attributes: ${changedKeys}`)
+    await Promise.all(instances.map(instance => {
 
-    await Promise.all(changedKeys.map(async fieldName => {
+      const changedKeys = []
 
-      const fieldDefinition = instance.rawAttributes[fieldName]
+      Object.keys(instance._changed).forEach(fieldName => {
+        if (instance._changed[fieldName]) {
+          changedKeys.push(fieldName)
+        }
+      })
 
-      // If no such attribute (virtual field), or no encryption needed
-      if (!fieldDefinition || !fieldDefinition.encrypted) {
+      if (!changedKeys.length) {
         return
       }
 
-      const type = new fieldDefinition.encrypted.type
-      const value = instance.get(fieldName)
+      debug(`Changed attributes: ${changedKeys}`)
 
-      // Validate value
-      type.validate(value)
+      return Promise.all(changedKeys.map(async fieldName => {
 
-      // Encode value into bytes
-      const bytes = encode(type, value)
+        const fieldDefinition = instance.rawAttributes[fieldName]
 
-      // Encrypt bytes
-      const encrypted = await encrypt(bytes)
+        // If no such attribute (virtual field), or no encryption needed
+        if (!fieldDefinition || !fieldDefinition.encrypted) {
+          return
+        }
 
-      instance.set(fieldName, encrypted)
+        const type = new fieldDefinition.encrypted.type
+        const value = instance.get(fieldName)
+
+        // Validate value
+        type.validate(value)
+
+        // Encode value into bytes
+        const bytes = encode(type, value)
+
+        // Encrypt bytes
+        const encrypted = await encrypt(bytes)
+
+        instance.set(fieldName, encrypted)
+      }))
     }))
   }
 
-  async function decryptAttributes(instance) {
+  async function decryptAttributes(instances) {
 
-    const attributeKeys = Object.keys(instance.rawAttributes)
+    if (instances.constructor !== Array) {
+      instances = [ instances ]
+    }
 
-    await Promise.all(attributeKeys.map(async fieldName => {
+    await Promise.all(instances.map(instance => {
 
-      const fieldDefinition = instance.rawAttributes[fieldName]
+      const attributeKeys = Object.keys(instance.rawAttributes)
 
-      // If no such attribute (virtual field), or no encryption needed
-      if (!fieldDefinition || !fieldDefinition.encrypted) {
-        return
-      }
+      return Promise.all(attributeKeys.map(async fieldName => {
 
-      const type = new fieldDefinition.encrypted.type
-      const encrypted = instance.get(fieldName)
+        const fieldDefinition = instance.rawAttributes[fieldName]
 
-      if (!encrypted) {
-        return null
-      }
+        // If no such attribute (virtual field), or no encryption needed
+        if (!fieldDefinition || !fieldDefinition.encrypted) {
+          return
+        }
 
-      // Decrypt bytes
-      const bytes = await decrypt(encrypted)
+        const type = new fieldDefinition.encrypted.type
+        const encrypted = instance.get(fieldName)
 
-      // Decode value from bytes
-      const value = decode(type, bytes)
+        if (!encrypted) {
+          return null
+        }
 
-      instance.set(fieldName, value)
+        // Decrypt bytes
+        const bytes = await decrypt(encrypted)
+
+        // Decode value from bytes
+        const value = decode(type, bytes)
+
+        instance.set(fieldName, value)
+      }))
     }))
   }
 
