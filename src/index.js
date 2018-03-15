@@ -11,7 +11,7 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
 
   async function encryptAttributes(instances) {
 
-    if (!instance) {
+    if (!instances) {
       return
     }
 
@@ -63,7 +63,7 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
 
   async function decryptAttributes(instances) {
 
-    if (!instance) {
+    if (!instances) {
       return
     }
 
