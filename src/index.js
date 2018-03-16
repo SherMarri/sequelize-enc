@@ -3,7 +3,7 @@
 const debug = require('debug')('sequelize-enc')
 const { encode, decode } = require('./bytes')
 
-module.exports = function (sequelize, { encrypt, decrypt, logger = console }) {
+module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
 
   if (!sequelize) {
     throw new Error('The required sequelize instance option is missing')
