@@ -3,7 +3,7 @@
 const debug = require('debug')('sequelize-enc')
 const { encode, decode } = require('./bytes')
 
-module.exports = function (sequelize, { encrypt, decrypt }) {
+module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
 
   if (!sequelize) {
     throw new Error('The required sequelize instance option is missing')
@@ -50,8 +50,13 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
         // Validate value
         type.validate(value)
 
-        // Encode value into bytes
-        const bytes = encode(type, value)
+        try {
+          // Encode value into bytes
+          const bytes = encode(type, value)
+        } catch (e) {
+          logger.error(e)
+          throw e
+        }
 
         // Encrypt bytes
         const encrypted = await encrypt(bytes)
@@ -91,8 +96,13 @@ module.exports = function (sequelize, { encrypt, decrypt }) {
           return null
         }
 
-        // Decrypt bytes
-        const bytes = await decrypt(encrypted)
+        try {
+          // Decrypt bytes
+          const bytes = await decrypt(encrypted)
+        } catch (e) {
+          logger.error(e)
+          throw e
+        }
 
         // Decode value from bytes
         const value = decode(type, bytes)
