@@ -50,9 +50,11 @@ module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
         // Validate value
         type.validate(value)
 
+        let bytes
+
         try {
           // Encode value into bytes
-          const bytes = encode(type, value)
+          bytes = encode(type, value)
         } catch (e) {
           logger.error(e)
           throw e
@@ -96,9 +98,11 @@ module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
           return null
         }
 
+        let bytes
+        
         try {
           // Decrypt bytes
-          const bytes = await decrypt(encrypted)
+          bytes = await decrypt(encrypted)
         } catch (e) {
           logger.error(e)
           throw e
