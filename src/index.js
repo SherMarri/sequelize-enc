@@ -9,7 +9,7 @@ module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
     throw new Error('The required sequelize instance option is missing')
   }
 
-  async function encryptAttributes(instances) {
+  async function encryptAttributes(instances, options) {
 
     if (!instances) {
       return
@@ -62,6 +62,9 @@ module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
 
         // Encrypt bytes
         const encrypted = await encrypt(bytes)
+
+        // https://github.com/sequelize/sequelize/issues/3243#issuecomment-230156752
+        options.validate = false
 
         instance.set(fieldName, encrypted)
       }))
