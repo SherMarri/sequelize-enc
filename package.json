@@ -1,6 +1,6 @@
 {
   "name": "sequelize-enc-extended",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Extended version of sequelize-enc. Encrypted attributes for Sequelize models with hooks",
   "homepage": "https://github.com/SherMarri/sequelize-enc",
   "bugs": {
