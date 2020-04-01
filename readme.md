@@ -11,7 +11,7 @@ sequelize.addHook('afterUpdate', decryptAttributes)
 ### Installation
 
 ```
-npm install --save sequelize-enc
+npm install --save sequelize-enc-extended
 ```
 
 ### Usage

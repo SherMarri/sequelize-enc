@@ -1,5 +1,5 @@
 {
-  "name": "sequelize-enc",
+  "name": "sequelize-enc-extended",
   "version": "1.0.8",
   "description": "Extended version of sequelize-enc. Encrypted attributes for Sequelize models with hooks",
   "homepage": "https://github.com/SherMarri/sequelize-enc",
