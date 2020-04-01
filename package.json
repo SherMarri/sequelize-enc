@@ -1,10 +1,10 @@
 {
   "name": "sequelize-enc",
   "version": "1.0.8",
-  "description": "Encrypted attributes for Sequelize models",
-  "homepage": "https://tallysticks.io",
+  "description": "Extended version of sequelize-enc. Encrypted attributes for Sequelize models with hooks",
+  "homepage": "https://github.com/SherMarri/sequelize-enc",
   "bugs": {
-    "url": "https://github.com/Tallysticks/sequelize-enc/issues"
+    "url": "https://github.com/SherMarri/sequelize-enc"
   },
   "license": "MIT",
   "author": {
@@ -15,12 +15,16 @@
     {
       "name": "Edward Ruchevits",
       "email": "edward@tallysticks.io"
+    },
+    {
+      "name": "Falak Sher Marri",
+      "email": "marribaloch128@gmail.com"
     }
   ],
   "main": "src",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tallysticks/sequelize-enc.git"
+    "url": "https://github.com/SherMarri/sequelize-enc.git"
   },
   "peerDependencies": {
     "sequelize": "^4.11.1"

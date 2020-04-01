@@ -2,6 +2,12 @@
 
 Support for encrypted attributes for [Sequelize](https://github.com/sequelize/sequelize) models.
 
+This is an extended version of sequelize-enc with two additional hooks:
+```js
+sequelize.addHook('afterCreate', decryptAttributes)
+sequelize.addHook('afterUpdate', decryptAttributes)
+```
+
 ### Installation
 
 ```

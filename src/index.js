@@ -122,4 +122,6 @@ module.exports = function (sequelize, { encrypt, decrypt }, logger = console) {
   sequelize.addHook('beforeCreate', encryptAttributes)
   sequelize.addHook('beforeUpdate', encryptAttributes)
   sequelize.addHook('afterFind', decryptAttributes)
+  sequelize.addHook('afterCreate', decryptAttributes)
+  sequelize.addHook('afterUpdate', decryptAttributes)
 }
